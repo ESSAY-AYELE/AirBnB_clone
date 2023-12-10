@@ -2,6 +2,12 @@
 "" "whateve"""
 import json
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
 
 
 class FileStorage:
@@ -22,7 +28,7 @@ class FileStorage:
         ob = FileStorage.__objects
         word = {obj: ob[obj].to_dict() for obj in ob.keys()}
         with open(FileStorage.__file_path, "w") as file:
-            json.damp(word, file)
+            json.dump(word, file)
 
     def reload(self):
         """ deserializes the JSON file to __objects
@@ -30,11 +36,13 @@ class FileStorage:
         otherwise, do nothing. If the file doesn’t
         exist, no exception should be raised)"""
         try:
-            with open(FileStorage.__file_path) as file:
-                object_dic = json.load(file)
+            with open(FileStorage.__file_path) as f:
+                object_dic = json.load(f)
                 for obj in object_dic.values():
                     cls_name = obj["__class__"]
                     del obj["__class__"]
                     self.new(eval(cls_name)(**obj))
         except FileNotFoundError:
+            return
+        except json.JSONDecodeError:
             return
