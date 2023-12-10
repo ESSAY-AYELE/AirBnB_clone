@@ -5,7 +5,7 @@ from models.base_model import BaseModel
 
 class User(BaseModel):
     """ represents User calsss the that inherit form BaseModel
-    
+
     Attributes
 
     email: string - empty string
